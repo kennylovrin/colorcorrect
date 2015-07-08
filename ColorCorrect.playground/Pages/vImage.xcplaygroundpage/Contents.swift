@@ -3,18 +3,15 @@
 import Cocoa
 import Accelerate
 
-// get the cgimage
-let url = NSBundle.mainBundle().URLForImageResource("test")!
-let source = CGImageSourceCreateWithURL(url, nil)!
-let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil)!
+let image = Image(named: "test")
 
 // get the image details
-let width = CGImageGetWidth(cgImage)
-let height = CGImageGetHeight(cgImage)
-let bitsPerComponent = CGImageGetBitsPerComponent(cgImage)
-let bitsPerPixel = CGImageGetBitsPerPixel(cgImage)
-let colorSpace = CGImageGetColorSpace(cgImage)!
-let bitmapInfo = CGImageGetBitmapInfo(cgImage)
+let width = CGImageGetWidth(image?.backingCGImage())
+let height = CGImageGetHeight(image?.backingCGImage())
+let bitsPerComponent = CGImageGetBitsPerComponent(image?.backingCGImage())
+let bitsPerPixel = CGImageGetBitsPerPixel(image?.backingCGImage())
+let colorSpace = CGImageGetColorSpace(image?.backingCGImage())!
+let bitmapInfo = CGImageGetBitmapInfo(image?.backingCGImage())
 
 // create a format for input
 var inFormat = vImage_CGImageFormat(
@@ -29,7 +26,7 @@ var inFormat = vImage_CGImageFormat(
 
 // create vimage input buffer
 var inBuffer = vImage_Buffer()
-vImageBuffer_InitWithCGImage(&inBuffer, &inFormat, nil, cgImage, vImage_Flags(kvImageNoFlags))
+vImageBuffer_InitWithCGImage(&inBuffer, &inFormat, nil, image!.backingCGImage(), vImage_Flags(kvImageNoFlags))
 
 // create output image (verifying it comes in and out properly)
 var outCGImage = vImageCreateCGImageFromBuffer(&inBuffer, &inFormat, nil, nil, vImage_Flags(kvImageNoFlags), nil).takeRetainedValue()
