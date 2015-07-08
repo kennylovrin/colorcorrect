@@ -34,7 +34,7 @@ extension Image: Correctable {
     }
     
     public func correctedImage() -> CIImage? {
-        return uncorrectedImage().removeOrangeMask()?.adjustGamma()?.invert()
+        return uncorrectedImage().removeOrangeMask()?.invert()?.adjustGamma()
     }
     
 }
