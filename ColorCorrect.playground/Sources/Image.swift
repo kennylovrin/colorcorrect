@@ -21,6 +21,15 @@ public struct Image {
 
 extension Image: Quartzable {
     
+    public var isColor: Bool {
+        get {
+            let bitsPerComponent = CGImageGetBitsPerComponent(backingImage)
+            let bitsPerPixel = CGImageGetBitsPerPixel(backingImage)
+            
+            return bitsPerPixel / bitsPerComponent > 1
+        }
+    }
+    
     public func backingCGImage() -> CGImage {
         return backingImage
     }
@@ -34,7 +43,16 @@ extension Image: Correctable {
     }
     
     public func correctedImage() -> CIImage? {
-        return uncorrectedImage().removeOrangeMask()?.invert()?.adjustGamma()
+        var image: CIImage? = uncorrectedImage()
+        
+        if isColor {
+            image = image?.removeOrangeMask()
+        }
+        
+        image = image?.invert()
+        image = image?.adjustGamma()
+        
+        return image
     }
     
 }

@@ -3,5 +3,6 @@
     <pages>
         <page name='vImage'/>
         <page name='CoreImage'/>
+        <page name='CoreImage BW'/>
     </pages>
 </playground>
